@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kmoe/spinnybot#readme",
   "dependencies": {
-    "telegraf": "^3.8.0"
+    "telegraf": "^3.8.0",
+    "winston": "^2.3.1"
   }
 }
