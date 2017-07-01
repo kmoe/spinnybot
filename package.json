@@ -1,0 +1,22 @@
+{
+  "name": "spinnybot",
+  "version": "0.0.1",
+  "description": "spinny",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"🕷️\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmoe/spinnybot.git"
+  },
+  "author": "Katy Moe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kmoe/spinnybot/issues"
+  },
+  "homepage": "https://github.com/kmoe/spinnybot#readme",
+  "dependencies": {
+    "telegraf": "^3.8.0"
+  }
+}
