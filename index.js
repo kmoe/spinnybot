@@ -28,16 +28,14 @@ bot.use((ctx, next) => {
   });
 });
 
-bot.command('spinny', (ctx, next) => {
-  winston.info('spinny');
+bot.use(memorySession());
 
+bot.command('spinny', (ctx, next) => {
   return ctx.reply(getDialogueString(ctx.message.text));
 });
 
 bot.use(Telegraf.mount('message', (ctx, next) => {
-  const msg = ctx.message.text;
-
-  return ctx.reply(msg + '?');
+  return ctx.reply(ctx.message.text + '?');
 }));
 
 fs.readFile('ethics', 'utf8', (err, data) => {
@@ -45,7 +43,9 @@ fs.readFile('ethics', 'utf8', (err, data) => {
     return winston.error('could not read ethics, aborting');
   }
 
-  const sentences = data.match(/.*?(?:\.|!|\?)(?:(?=[A-Z0-9])|$)/g); //TODO: spinoza regular expression
+  const sentences = data
+    .replace(/Q\.E\.D\.|\[[0-9]{0,2}\]/, "")
+    .match(/.*?(?:\.|!|\?)(?:(?=[A-Z0-9])|$)/g); 
 
   if (!sentences) {
     return winston.error('no sentences in ethics, aborting');
@@ -56,8 +56,23 @@ fs.readFile('ethics', 'utf8', (err, data) => {
   bot.startPolling();
 });
 
-function getDialogueString(query) { //query is whatever the user typed in
-  const index = Math.floor(Math.random() * DIALOGUE_STRINGS.length); 
+function getDialogueString(message) { 
+  const query = message.replace("/spinny", "");
+  winston.info('getting dialogue string for query ' + query);
+  
+  if (query !== "") {
+    const matches = DIALOGUE_STRINGS.filter((sentence) => {
+      return sentence.indexOf(query) > -1;
+    });
 
+    const index = roll(matches.length);
+    return matches[index];
+  }
+  
+  const index = roll(DIALOGUE_STRINGS.length);
   return DIALOGUE_STRINGS[index];
+}
+
+function roll(maxValue) {
+  return Math.floor(Math.random() * maxValue);
 }
